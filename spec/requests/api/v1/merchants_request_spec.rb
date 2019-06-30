@@ -64,4 +64,30 @@ describe "Merchants API" do
     merchant = [merchant]
     expect(merchant.count).to eq(1)
   end
+
+  it "can get all merchant items" do
+    m1 = create(:merchant)
+    i = create_list(:item, 5, merchant: m1)
+    i6 = create(:item)
+
+    get "/api/v1/merchants/#{m1.id}/items"
+
+    items = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(items.count).to eq(5)
+  end
+
+  it "can get all merchant invoices" do
+    m1 = create(:merchant)
+    i = create_list(:invoice, 4, merchant: m1)
+    i5 = create(:invoice)
+
+    get "/api/v1/merchants/#{m1.id}/invoices"
+
+    invoices = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(invoices.count).to eq(4)
+  end
 end
