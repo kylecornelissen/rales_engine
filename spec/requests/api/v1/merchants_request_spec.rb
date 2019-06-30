@@ -21,6 +21,8 @@ describe "Merchants API" do
 
     expect(response).to be_successful
     expect(merchant["id"].to_i).to eq(id)
+    merchant = [merchant]
+    expect(merchant.count).to eq(1)
   end
 
   it "can get one merchant by given parameter" do
@@ -34,6 +36,8 @@ describe "Merchants API" do
 
     expect(response).to be_successful
     expect(merchant["attributes"]["name"]).to eq("bob")
+    merchant = [merchant]
+    expect(merchant.count).to eq(1)
   end
 
   it "can get all merchants by given parameter" do
@@ -47,5 +51,17 @@ describe "Merchants API" do
 
     expect(response).to be_successful
     expect(merchants.count).to eq(2)
+  end
+
+  it "can get a random merchant" do
+    m1 = create_list(:merchant, 3)
+
+    get "/api/v1/merchants/random"
+
+    merchant = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    merchant = [merchant]
+    expect(merchant.count).to eq(1)
   end
 end

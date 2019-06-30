@@ -22,6 +22,8 @@ describe "InvoiceItems API" do
 
     expect(response).to be_successful
     expect(invoice_item["id"].to_i).to eq(id)
+    invoice_item = [invoice_item]
+    expect(invoice_item.count).to eq(1)
   end
 
   it "can get one invoice item by given parameter" do
@@ -35,6 +37,8 @@ describe "InvoiceItems API" do
 
     expect(response).to be_successful
     expect(invoice_item["attributes"]["quantity"]).to eq(5)
+    invoice_item = [invoice_item]
+    expect(invoice_item.count).to eq(1)
   end
 
   it "can get all invoice items by given parameter" do
@@ -48,5 +52,17 @@ describe "InvoiceItems API" do
 
     expect(response).to be_successful
     expect(invoice_items.count).to eq(2)
+  end
+
+  it "can get a random invoice item" do
+    ii1 = create_list(:invoice_item, 3)
+
+    get "/api/v1/invoice_items/random"
+
+    invoice_item = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    invoice_item = [invoice_item]
+    expect(invoice_item.count).to eq(1)
   end
 end

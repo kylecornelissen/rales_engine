@@ -21,6 +21,8 @@ describe "Customers API" do
 
     expect(response).to be_successful
     expect(customer["id"].to_i).to eq(id)
+    customer = [customer]
+    expect(customer.count).to eq(1)
   end
 
   it "can get one customer by given parameter" do
@@ -34,6 +36,8 @@ describe "Customers API" do
 
     expect(response).to be_successful
     expect(customer["attributes"]["first_name"]).to eq("bob")
+    customer = [customer]
+    expect(customer.count).to eq(1)
   end
 
   it "can get all customers by given parameter" do
@@ -47,5 +51,17 @@ describe "Customers API" do
 
     expect(response).to be_successful
     expect(customers.count).to eq(2)
+  end
+
+  it "can get a random customer" do
+    c1 = create_list(:customer, 3)
+
+    get "/api/v1/customers/random"
+
+    customer = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    customer = [customer]
+    expect(customer.count).to eq(1)
   end
 end
