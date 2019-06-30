@@ -64,4 +64,18 @@ describe "Transactions API" do
     transaction = [transaction]
     expect(transaction.count).to eq(1)
   end
+
+  it "can get transaction invoice" do
+    in1 = create(:invoice, status: "test")
+    t1 = create(:transaction, invoice: in1)
+
+    get "/api/v1/transactions/#{t1.id}/invoice"
+
+    invoice = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(invoice["attributes"]["status"]).to eq("test")
+    invoice = [invoice]
+    expect(invoice.count).to eq(1)
+  end
 end

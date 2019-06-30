@@ -64,4 +64,30 @@ describe "Customers API" do
     customer = [customer]
     expect(customer.count).to eq(1)
   end
+
+  it "can get customer invoices" do
+    c1 = create(:customer)
+    i_list = create_list(:invoice, 5, customer: c1)
+    i6 = create(:invoice)
+
+    get "/api/v1/customers/#{c1.id}/invoices"
+
+    invoices = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(invoices.count).to eq(5)
+  end
+
+  it "can get customer transactions" do
+    c1 = create(:customer)
+    i1 = create(:invoice, customer: c1)
+    t_list = create_list(:transaction, 4, invoice: i1)
+
+    get "/api/v1/customers/#{c1.id}/transactions"
+
+    transactions = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(transactions.count).to eq(4)
+  end
 end
