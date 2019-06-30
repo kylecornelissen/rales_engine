@@ -6,6 +6,8 @@ Rails.application.routes.draw do
         get '/find', to: 'find#show'
         get '/find_all', to: 'find#index'
         get '/random', to: 'random#show'
+        get '/:id/items', to: 'items#index'
+        get '/:id/invoices', to: 'invoices#index'
       end
 
       namespace :customers do
@@ -46,6 +48,5 @@ Rails.application.routes.draw do
       resources :invoice_items, only: [:index, :show]
     end
   end
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
