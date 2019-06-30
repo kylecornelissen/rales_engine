@@ -23,6 +23,8 @@ describe "Items API" do
 
     expect(response).to be_successful
     expect(item["id"].to_i).to eq(id)
+    item = [item]
+    expect(item.count).to eq(1)
   end
 
   it "can get one item by given parameter" do
@@ -37,6 +39,8 @@ describe "Items API" do
 
     expect(response).to be_successful
     expect(item["attributes"]["name"]).to eq("car")
+    item = [item]
+    expect(item.count).to eq(1)
   end
 
   it "can get all items by given parameter" do
@@ -51,5 +55,17 @@ describe "Items API" do
 
     expect(response).to be_successful
     expect(items.count).to eq(2)
+  end
+
+  it "can get a random item" do
+    i1 = create_list(:item, 3)
+
+    get "/api/v1/items/random"
+
+    item = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    item = [item]
+    expect(item.count).to eq(1)
   end
 end
