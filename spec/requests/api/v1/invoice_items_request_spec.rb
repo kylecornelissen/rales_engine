@@ -65,4 +65,32 @@ describe "InvoiceItems API" do
     invoice_item = [invoice_item]
     expect(invoice_item.count).to eq(1)
   end
+
+  it "can get invoice_item invoice" do
+    i1 = create(:invoice, status: "test")
+    ii1 = create(:invoice_item, invoice: i1)
+
+    get "/api/v1/invoice_items/#{ii1.id}/invoice"
+
+    invoice = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(invoice["attributes"]["status"]).to eq("test")
+    invoice = [invoice]
+    expect(invoice.count).to eq(1)
+  end
+
+  it "can get invoice_item item" do
+    item1 = create(:item, name: "book")
+    ii1 = create(:invoice_item, item: item1)
+
+    get "/api/v1/invoice_items/#{ii1.id}/item"
+
+    item = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(item["attributes"]["name"]).to eq("book")
+    item = [item]
+    expect(item.count).to eq(1)
+  end
 end
