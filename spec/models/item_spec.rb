@@ -32,9 +32,9 @@ RSpec.describe Item, type: :model do
       @inv_item3 = create(:invoice_item, invoice: @invoice1, item: @item3, unit_price: 20, quantity: 2)
       @inv_item4 = create(:invoice_item, invoice: @invoice2, item: @item4, unit_price: 100, quantity: 2)
       @inv_item5 = create(:invoice_item, invoice: @invoice2, item: @item5, unit_price: 150, quantity: 2)
-      @inv_item6 = create(:invoice_item, invoice: @invoice2, item: @item6, unit_price: 200, quantity: 2)
-      @inv_item7 = create(:invoice_item, invoice: @invoice3, item: @item7, unit_price: 1, quantity: 3)
-      @inv_item8 = create(:invoice_item, invoice: @invoice3, item: @item8, unit_price: 2, quantity: 2)
+      @inv_item6 = create(:invoice_item, invoice: @invoice2, item: @item6, unit_price: 200, quantity: 4)
+      @inv_item7 = create(:invoice_item, invoice: @invoice3, item: @item7, unit_price: 1, quantity: 7)
+      @inv_item8 = create(:invoice_item, invoice: @invoice3, item: @item8, unit_price: 2, quantity: 5)
       @inv_item9 = create(:invoice_item, invoice: @invoice3, item: @item9, unit_price: 3, quantity: 8)
     end
 
@@ -43,7 +43,15 @@ RSpec.describe Item, type: :model do
       revenue = items.most_revenue(5).map { |item| item.revenue }
 
       expect(items.most_revenue(5)).to eq([@item6, @item5, @item4, @item3, @item2])
-      expect(revenue).to eq([400, 300, 200, 40, 30])
+      expect(revenue).to eq([800, 300, 200, 40, 30])
+    end
+
+    it '.most_quantity_sold' do
+      items = Item.all
+      total_quantity_sold = items.most_quantity_sold(4).map { |item| item.total_quantity }
+
+      expect(items.most_quantity_sold(4)).to eq([@item9, @item7, @item8, @item6])
+      expect(total_quantity_sold).to eq([8, 7, 5, 4])
     end
   end
 end
