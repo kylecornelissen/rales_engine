@@ -63,10 +63,12 @@ RSpec.describe Merchant, type: :model do
 
   describe 'instance methods' do
     before :each do
+      @c1 = create(:customer)
+      @c2 = create(:customer)
       @m1 = create(:merchant)
       @m2 = create(:merchant)
       @m3 = create(:merchant)
-      @invoice1 = create(:invoice, merchant: @m1, updated_at: "2012-03-25 09:54:09 UTC")
+      @invoice1 = create(:invoice, merchant: @m1, customer: @c2, updated_at: "2012-03-25 09:54:09 UTC")
       @invoice2 = create(:invoice, merchant: @m2, updated_at: "2012-03-24 09:54:09 UTC")
       @invoice3 = create(:invoice, merchant: @m3, updated_at: "2012-03-24 09:54:09 UTC")
       @t1 = create(:transaction, invoice: @invoice1, result: "success")
@@ -91,9 +93,20 @@ RSpec.describe Merchant, type: :model do
       @inv_item8 = create(:invoice_item, invoice: @invoice3, item: @item8, unit_price: 2, quantity: 2)
       @inv_item9 = create(:invoice_item, invoice: @invoice3, item: @item9, unit_price: 3, quantity: 8)
     end
-    
+
     it '.revenue' do
       expect(@m1.revenue).to eq(80)
+    end
+
+    it '.favorite_customer' do
+      invoice4 = create(:invoice, merchant: @m1, customer: @c1)
+      t4 = create(:transaction, invoice: @invoice1, result: "success")
+      t5 = create(:transaction, invoice: invoice4, result: "success")
+
+      transactions = @m1.favorite_customer.trx_count
+
+      expect(@m1.favorite_customer).to eq(@c2)
+      expect(transactions).to eq(2)
     end
   end
 end
