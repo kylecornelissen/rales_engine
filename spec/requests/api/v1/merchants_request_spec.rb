@@ -94,10 +94,12 @@ end
 
 describe "Business Intel endpoints" do
   before :each do
+    @c1 = create(:customer)
+    @c2 = create(:customer)
     @m1 = create(:merchant)
     @m2 = create(:merchant)
     @m3 = create(:merchant)
-    @invoice1 = create(:invoice, merchant: @m1)
+    @invoice1 = create(:invoice, merchant: @m1, customer: @c1)
     @invoice2 = create(:invoice, merchant: @m2)
     @invoice3 = create(:invoice, merchant: @m3)
     @t1 = create(:transaction, invoice: @invoice1, result: "success")
@@ -146,5 +148,18 @@ describe "Business Intel endpoints" do
 
     expect(response).to be_successful
     expect(merchant["attributes"]["revenue"]).to eq("0.80")
+  end
+
+  it 'can get merchant favorite customer with most transactions' do
+    invoice4 = create(:invoice, merchant: @m1, customer: @c2)
+    t4 = create(:transaction, invoice: @invoice1, result: "success")
+    t5 = create(:transaction, invoice: invoice4, result: "success")
+
+    get "/api/v1/merchants/#{@m1.id}/favorite_customer"
+
+    customer = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(customer["id"].to_i).to eq(@c1.id)
   end
 end
