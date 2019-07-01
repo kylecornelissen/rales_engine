@@ -138,4 +138,13 @@ describe "Business Intel endpoints" do
     expect(response).to be_successful
     expect(merchants.count).to eq(2)
   end
+
+  it 'can get merchant revenue' do
+    get "/api/v1/merchants/#{@m1.id}/revenue"
+
+    merchant = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(merchant["attributes"]["revenue"]).to eq("0.80")
+  end
 end
