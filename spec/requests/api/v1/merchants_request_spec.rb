@@ -123,11 +123,19 @@ describe "Business Intel endpoints" do
     @inv_item9 = create(:invoice_item, invoice: @invoice3, item: @item9, unit_price: 3, quantity: 1)
   end
 
-  it 'can get top merchants by most revenue given quantity parameter' do
+  it 'can get top merchants by most revenue given limit parameter' do
     get "/api/v1/merchants/most_revenue?quantity=3"
 
     merchants = JSON.parse(response.body)["data"]
     expect(response).to be_successful
     expect(merchants.count).to eq(3)
+  end
+
+  it 'can get top merchants by most items sold given limit parameter' do
+    get "/api/v1/merchants/most_items?quantity=2"
+
+    merchants = JSON.parse(response.body)["data"]
+    expect(response).to be_successful
+    expect(merchants.count).to eq(2)
   end
 end
