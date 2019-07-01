@@ -20,4 +20,18 @@ class Merchant < ApplicationRecord
     .order('total_items DESC')
     .limit(quantity)
   end
+
+  # def self.total_revenue_by_date(date)
+  #   require "pry"; binding.pry
+  #   Invoice.joins(:invoice_items, :transactions)
+  #   .where(updated_at: date)
+  #   .sum('invoice_items.quantity * invoice_items.unit_price')
+  # end
+
+  def revenue
+    Invoice.joins(:invoice_items, :transactions)
+    .where(merchant: self.id, 'transactions.result' => 'success')
+    .sum('invoice_items.quantity * invoice_items.unit_price')
+  end
+
 end
