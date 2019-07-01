@@ -44,7 +44,8 @@ In this project, I used Rails and ActiveRecord to build a JSON API which exposes
 
 ## Relationship Endpoints:
 ### Merchants
-- GET /api/v1/merchants/:id/items ^returns a collection of items associated with that merchant
+- GET /api/v1/merchants/:id/items
+-- returns a collection of items associated with that merchant
 - GET /api/v1/merchants/:id/invoices returns a collection of invoices associated with that merchant from their known orders
 ### Customers
 - GET /api/v1/customers/:id/invoices returns a collection of associated invoices
