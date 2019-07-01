@@ -129,7 +129,10 @@ describe "Business Intel endpoints" do
     get "/api/v1/merchants/most_revenue?quantity=3"
 
     merchants = JSON.parse(response.body)["data"]
+    top_merchants = merchants.map { |merchant| merchant["attributes"]["id"] }
+
     expect(response).to be_successful
+    expect(top_merchants).to eq([@m2.id, @m1.id, @m3.id])
     expect(merchants.count).to eq(3)
   end
 
