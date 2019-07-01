@@ -121,9 +121,9 @@ describe "Business Intel endpoints" do
     @inv_item3 = create(:invoice_item, invoice: @invoice1, item: @item3, unit_price: 20, quantity: 1)
     @inv_item4 = create(:invoice_item, invoice: @invoice2, item: @item4, unit_price: 100, quantity: 2)
     @inv_item5 = create(:invoice_item, invoice: @invoice2, item: @item5, unit_price: 150, quantity: 2)
-    @inv_item6 = create(:invoice_item, invoice: @invoice2, item: @item6, unit_price: 200, quantity: 2)
-    @inv_item7 = create(:invoice_item, invoice: @invoice3, item: @item7, unit_price: 1, quantity: 3)
-    @inv_item8 = create(:invoice_item, invoice: @invoice3, item: @item8, unit_price: 2, quantity: 2)
+    @inv_item6 = create(:invoice_item, invoice: @invoice2, item: @item6, unit_price: 200, quantity: 4)
+    @inv_item7 = create(:invoice_item, invoice: @invoice3, item: @item7, unit_price: 1, quantity: 7)
+    @inv_item8 = create(:invoice_item, invoice: @invoice3, item: @item8, unit_price: 2, quantity: 5)
     @inv_item9 = create(:invoice_item, invoice: @invoice3, item: @item9, unit_price: 3, quantity: 8)
   end
 
@@ -136,5 +136,16 @@ describe "Business Intel endpoints" do
     expect(response).to be_successful
     expect(top_items).to eq([@item6.id, @item5.id, @item4.id, @item9.id, @item3.id])
     expect(items.count).to eq(5)
+  end
+
+  it 'can get top items by most quantity sold given limit parameter' do
+    get "/api/v1/items/most_items?quantity=4"
+
+    items = JSON.parse(response.body)["data"]
+    top_items = items.map { |item| item["attributes"]["id"] }
+
+    expect(response).to be_successful
+    expect(top_items).to eq([@item9.id, @item7.id, @item8.id, @item6.id])
+    expect(items.count).to eq(4)
   end
 end
